@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM - India</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="row justify-content-center">
+        <div class="p-4 m-5 text-dark col-xl-3 col-md-5 col-sm-6" style="background-color: rgb(247, 236, 236);">
+            <h3><b>ATM Cash Withdrawal</b></h3>
+            <h5>Enter Amount</h5>
+            <div class="input-group">
+                <input type="text" id="cashInput" class="form-control">
+                <button class="btn btn-outline-secondary" id="withdrawBtn" type="button">Withdraw</button>
+            </div>
+            <br>
+            <div id="cash">
+
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        
+
+        let cashes = {
+            M100: 3, 
+            M500: 5, 
+            M2000: 10,
+        };
+
+        let notes100 = cashes.M100;
+        let notes500 = cashes.M500;
+        let notes2000 = cashes.M2000;
+
+        let leftAmountToCollect = 0;
+        let disposable = {
+            A100: 0,
+            A500: 0,
+            A2000: 0,
+        };
+
+        function giveAmount(amount, typeOfNote){
+            var result = Math.floor(amount / typeOfNote);
+
+           
+            if(typeOfNote == 2000) 
+            { 
+                disposable.A2000 = (disposable.A2000 <= result) ? result : disposable.A2000; 
+
+            } else if(typeOfNote == 500) {
+
+                 disposable.A500 = (disposable.A500 <= result) ? result : disposable.A500; 
+
+            } else {
+
+                 disposable.A100 = (disposable.A100 <= result) ? result : disposable.A100; 
+               
+
+            }
+
+            leftAmountToCollect = amount - (result * typeOfNote);
+
+   
+
+            if(result >= 1 ){
+                 withdrawal(leftAmountToCollect);
+            }else{
+                return;
+            }
+        }
+
+
+        function withdrawal(amount){
+
+           
+
+            if(amount >= 2000){
+
+                giveAmount(amount, 2000);
+
+            }else if(amount >= 500){
+
+                giveAmount(amount, 500);
+
+            }else{
+                giveAmount(amount, 100);
+                
+            }
+
+     
+            if(leftAmountToCollect > 0){
+                return false;
+            }
+                
+            return disposable;
+
+        }
+
+
+
+    </script>
+
+    <script>
+        document.getElementById('withdrawBtn').addEventListener('click', () => {
+            let cashAmount = document.getElementById('cashInput').value;
+
+            if(cashAmount <= 0){
+                alert('Please Enter Amount');
+                return false;
+            }
+
+            disposable.A2000 = 0;
+            disposable.A500 = 0;
+            disposable.A100 = 0;
+            leftAmountToCollect = 0;
+            
+            let fn_result = withdrawal(cashAmount);
+
+
+            if(fn_result == false){
+                document.getElementById('cash').innerHTML = "<h5 class='text-danger'>No Cash</h5>";
+            }else{
+                document.getElementById('cash').innerHTML = `
+                    <h5 class='text-success'>Thank You</h5>
+                    <h6 class='text-primary'>Transaction Successful</h6>
+                    <br>
+                    <p>INR 100.00 x ${fn_result.A100} = INR ${fn_result.A100 * 100}.00</p>
+                    <p>INR 500.00 x ${fn_result.A500} = INR ${fn_result.A500 * 500}.00</p>
+                    <p>INR 2000.00 x ${fn_result.A2000} = INR ${fn_result.A2000 * 2000}.00</p>
+                    <p><b>Total</b> INR ${cashAmount}.00</p>
+                    <br>
+                    <p class='text-success'>Please collect the cash</p>
+                `;
+            }
+            
+        })
+    </script>
+
+</body>
+</html>
