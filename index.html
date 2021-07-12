@@ -11,6 +11,9 @@
 
     <div class="row justify-content-center">
         <div class="p-4 m-5 text-dark col-xl-3 col-md-5 col-sm-6" style="background-color: rgb(247, 236, 236);">
+            <div class="text-center">
+                <img src="https://www.countryflags.io/in/shiny/64.png">
+            </div>
             <h3><b>ATM Cash Withdrawal</b></h3>
             <h5>Enter Amount</h5>
             <div class="input-group">
@@ -130,10 +133,17 @@
                     <h5 class='text-success'>Thank You</h5>
                     <h6 class='text-primary'>Transaction Successful</h6>
                     <br>
-                    <p>INR 100.00 x ${fn_result.A100} = INR ${fn_result.A100 * 100}.00</p>
-                    <p>INR 500.00 x ${fn_result.A500} = INR ${fn_result.A500 * 500}.00</p>
-                    <p>INR 2000.00 x ${fn_result.A2000} = INR ${fn_result.A2000 * 2000}.00</p>
-                    <p><b>Total</b> INR ${cashAmount}.00</p>
+                    ${
+                        fn_result.A100 > 0 ? `<p><b>INR</b> 100.00 x ${fn_result.A100} = <b>INR</b> ${fn_result.A100 * 100}.00</p>` : ""
+                    }
+                    ${
+                        fn_result.A500 > 0 ? `<p><b>INR</b> 500.00 x ${fn_result.A500} = <b>INR</b> ${fn_result.A500 * 500}.00</p>` : ""
+                    }
+                    ${
+                        fn_result.A2000 > 0 ? `<p><b>INR</b> 2000.00 x ${fn_result.A2000} = <b>INR</b> ${fn_result.A2000 * 2000}.00</p>` : ""
+                    }
+                    
+                    <p><b>Total Amount:  INR</b> ${cashAmount}.00</p>
                     <br>
                     <p class='text-success'>Please collect the cash</p>
                 `;
